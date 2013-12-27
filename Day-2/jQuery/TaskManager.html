@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+	h1{
+		margin-top: 0px;
+		border-top: 2px solid blue;
+		border-bottom: 2px solid blue;
+		background-color: lightblue;
+		padding : 15px;
+	}
+	.completed {
+		color : red;
+		text-decoration: line-through;
+		font-style: italic;
+	}
+	#ulTaskList > li{
+		cursor : pointer;
+	}
+	</style>
+	<script>
+	(function(window,document){
+		window.addEventListener("DOMContentLoaded",init);
+		function init(){
+			document.getElementById("btnAdd").addEventListener("click",onBtnAddClick);
+			document.getElementById("btnRemoveCompleted").addEventListener("click",onBtnRemoveCompletedClick);
+			initializeTaskClick();
+		}
+		function onBtnRemoveCompletedClick(){
+			var ulTaskList = document.getElementById("ulTaskList");
+			for(var i=ulTaskList.children.length-1;i>=0;i--){
+				var taskItem = ulTaskList.children[i];
+				if (taskItem.classList.contains("completed")){
+					taskItem.remove();
+				}
+			}
+		}
+		function initializeTaskClick(){
+			var ulTaskList = document.getElementById("ulTaskList");
+			for(var i=0;i<ulTaskList.children.length;i++){
+				var taskItem = ulTaskList.children[i];
+				taskItem.addEventListener("click",onTaskItemClick);
+			}
+		}
+		function onBtnAddClick(){
+			var txtTask = document.getElementById("txtTask");
+			var ulTaskList = document.getElementById("ulTaskList");
+			var taskName = txtTask.value;
+
+			var newTaskItem = "<li>" + taskName + "</li>";
+			ulTaskList.innerHTML += newTaskItem;
+		}
+		function onTaskItemClick(){
+			if (this.classList.contains("completed")){
+				this.classList.remove("completed");
+			} else {
+				this.classList.add("completed");
+			}
+		}
+	})(window,document);
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<span>Task :</span>
+	<input type="text" name="" id="txtTask">
+	<input type="button" value="Add Task" id="btnAdd">
+	<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+	<ul id="ulTaskList">
+		<li class="completed">Task-1</li>
+		<li>Task-2</li>
+		<li>Task-3</li>
+	</ul>
+	<div id="divMessage"></div>
+</body>
+</html>
