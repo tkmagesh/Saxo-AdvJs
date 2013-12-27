@@ -27,43 +27,17 @@
 		function init(){
 			$("#btnAdd").click(onBtnAddClick);
 			$("#btnRemoveCompleted").click(onBtnRemoveCompletedClick);
-			initializeTaskClick();
+			$("#ulTaskList").on("click","li",onTaskItemClick);
+			//$("#ulTaskList > li").on("click",onTaskItemClick);
 		}
 		function onBtnRemoveCompletedClick(){
-			var ulTaskList = document.getElementById("ulTaskList");
-			for(var i=ulTaskList.children.length-1;i>=0;i--){
-				var taskItem = ulTaskList.children[i];
-				if (taskItem.classList.contains("completed")){
-					taskItem.remove();
-				}
-			}
-		}
-		function initializeTaskClick(){
-			/*var ulTaskList = document.getElementById("ulTaskList");
-			for(var i=0;i<ulTaskList.children.length;i++){
-				var taskItem = ulTaskList.children[i];
-				taskItem.addEventListener("click",onTaskItemClick);
-			}*/
-			$("#ulTaskList > li").click(onTaskItemClick);
+			$("#ulTaskList > li.completed").remove();
 		}
 		function onBtnAddClick(){
-			var txtTask = document.getElementById("txtTask");
-			var ulTaskList = document.getElementById("ulTaskList");
-			var taskName = txtTask.value;
-
-			var newTaskItem = document.createElement("li");
-			newTaskItem.innerText = taskName;
-			newTaskItem.addEventListener("click",onTaskItemClick);
-
-			//ulTaskList.innerHTML += newTaskItem;
-			ulTaskList.appendChild(newTaskItem);
+			$("<li>").text($("#txtTask").val()).appendTo("#ulTaskList");
 		}
 		function onTaskItemClick(){
-			if (this.classList.contains("completed")){
-				this.classList.remove("completed");
-			} else {
-				this.classList.add("completed");
-			}
+			$(this).toggleClass("completed");
 		}
 	})(window,document);
 	</script>
