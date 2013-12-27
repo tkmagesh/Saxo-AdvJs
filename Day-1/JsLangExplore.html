@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript Language</title>
+	<style>
+		.pass{
+			color : green;
+			font-weight: bold;
+		}
+		.fail{
+			color : red;
+			text-decoration: line-through;
+			font-style: italic;
+		}
+	</style>
+	<script src="Calculator.js"></script>
+	<script>
+	(function(){
+		window.addEventListener("DOMContentLoaded",init);
+		function init(){
+			test("adding 1 and 2 returns 3",function(){
+				//arrange
+					var n1 = 1, n2 = 2, expectedResult = 3;
+				//act
+					var result = sum(n1,n2);
+				//assert
+					return (result === expectedResult);
+			});
+			test("adding '1' and '2' returns 3",function(){
+				//arrange
+					var n1 = "1", n2 = "2", expectedResult = 3;
+				//act
+					var result = sum(n1,n2);
+				//assert
+					return (result === expectedResult);
+			});
+			test("adding 1 returns 1",function(){
+				//arrange
+					var n1 = 1 , expectedResult = 1;
+				//act
+					var result = sum(n1);
+				//assert
+					return (result === expectedResult);
+			});
+			test("adding with no arguments returns 0",function(){
+				//arrange
+					var expectedResult = 0;
+				//act
+					var result = sum();
+				//assert
+					return (result === expectedResult);
+			});
+			test("adding more than 2 arguments returns the result",function(){
+				//arrange
+					var n1 = 1, n2 = 2, n3 = 3, expectedResult = 6;
+				//act
+					var result = sum(n1,n2,n3);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept functions returning number as argument",function(){
+				//arrange
+					var f1 = function(){ return 1},
+						f2 = function(){ return 2},
+						expectedResult = 3;
+				//act
+					var result = sum(f1,f2);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept functions returning functions returning number as argument",function(){
+				//arrange
+					var f1 = function(){ return function(){ return 1;}},
+						f2 = function(){ return function(){ return 2;}},
+						expectedResult = 3;
+				//act
+					var result = sum(f1,f2);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept an array of numbers as argument",function(){
+				//arrange
+					var numbers1 = ["11","12","13"]
+						expectedResult = 36;
+				//act
+					var result = sum(numbers1);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept more than one array of numbers as argument",function(){
+				//arrange
+					var numbers1 = ["11","12","13"],
+						numbers2 = ["21","22","23"]
+						expectedResult = 102;
+				//act
+					var result = sum(numbers1,numbers2);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept a nested array of numbers as argument",function(){
+				//arrange
+					var numbers1 = ["11",["12",["13"]]],
+						expectedResult = 36;
+				//act
+					var result = sum(numbers1);
+				//assert
+					return (result === expectedResult);
+			});
+			test("should accept an array of functions returning number as argument",function(){
+				//arrange
+					var arrOfFns = [
+						function(){ var length = 10; return "11";},
+						function(){ return "12";},
+						function(){ return "13";}
+					]
+						expectedResult = 36;
+				//act
+					var result = sum(arrOfFns);
+				//assert
+					return (result === expectedResult);
+			});
+		
+		}
+		
+		
+		function test(testTitle,testFn){
+			var testCaseItem = document.createElement("li");
+			testCaseItem.innerText = testTitle;
+			testCaseItem.classList.add(testFn() ? "pass" : "fail");
+			document.getElementById("testCaseList").appendChild(testCaseItem);
+		}
+	})();
+	</script>
+</head>
+<body>
+	<h1>Unversal Sum</h1>
+	<ul id="testCaseList">
+		
+	</ul>
+</body>
+</html>
