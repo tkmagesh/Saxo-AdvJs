@@ -15,7 +15,10 @@ function SalaryCalculator(){
 		function triggerChange(attrName){
 			if (typeof _onChangeSubscribers[attrName] !== "undefined")
 				for(var i=0;i<_onChangeSubscribers[attrName].length;i++)
-					_onChangeSubscribers[attrName][i]();
+					setTimeout((function(index){
+						_onChangeSubscribers[attrName][index]();	
+					})(i));
+					
 		} 
 
 		this.basic = function(){
