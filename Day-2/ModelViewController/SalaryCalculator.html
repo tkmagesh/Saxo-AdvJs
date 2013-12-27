@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Salary Calculator</title>
+	<style>
+	label{
+		display : block;
+		float : left;
+		width : 50px;
+	}
+	#divResult{
+		font-size: 28pt;
+		color :red;
+	}
+	</style>
+	<script src="jquery-1.10.2.js"></script>
+	<script src="CalculatorModel.js"></script>
+	<script src="CalculatorView.js"></script>
+	<script>
+	
+	(function(){
+
+		//Uncomment the below code for testing
+		/*window.calculator = new SalaryCalculator();
+		window.calculatorView = new CalculatorView(window.calculator,"#calculatorTemplate")
+		window.addEventListener("DOMContentLoaded",function(){
+			window.calculatorView.init();
+			window.calculatorView.render();
+			$(document.body).append(window.calculatorView.$root)
+		});*/
+
+		//comment the below code for testing
+		var calculator = new SalaryCalculator();
+		var calculatorView = new CalculatorView(calculator,"#calculatorTemplate")
+		window.addEventListener("DOMContentLoaded",function(){
+			calculatorView.init();
+			calculatorView.render();
+			$(document.body).append(calculatorView.$root)
+		});
+	})();
+
+	</script>
+	<script type="text/template" id="calculatorTemplate">
+		<div><label>Basic : </label><input type="text" name="" id="txtBasic"></div>
+	<div><label>Hra : </label><input type="text" name="" id="txtHra"></div>
+	<div><label>Da : </label><input type="text" name="" id="txtDa"></div>
+	<div>
+		<label>Tax : </label>
+		<input type="range" name="" id="rangeTax" min="0" max="50" value="0">
+		<span id="spanTax">[Tax%]</span>
+	</div>
+	<div><input type="button" value="Calculate" id="btnCalculate"></div>
+	<div id="divResult"></div>
+	</script>
+</head>
+<body>
+	<h1>Salary Calculator</h1>
+	
+</body>
+</html>
