@@ -15,23 +15,104 @@
 	}
 	</style>
 	<script>
+	function SalaryCalculator(){
+		var _basic = 0,
+			_hra = 0,
+			_da = 0,
+			_tax = 0;
+			_salary = 0,
+			_onChangeSubscribers = {},
+			self = this;
+
+		this.addSubscriber = function(attrName,subscriptionFn){
+			if (typeof _onChangeSubscribers[attrName] === "undefined")
+				_onChangeSubscribers[attrName] = [];
+			_onChangeSubscribers[attrName].push(subscriptionFn);
+		};
+		function triggerChange(attrName){
+			if (typeof _onChangeSubscribers[attrName] !== "undefined")
+				for(var i=0;i<_onChangeSubscribers[attrName].length;i++)
+					_onChangeSubscribers[attrName][i]();
+		} 
+
+		this.basic = function(){
+			if (arguments.length === 0) return _basic;
+			_basic = arguments[0];
+			triggerChange('Basic');
+		};
+		this.hra = function(){
+			if (arguments.length === 0) return _hra;
+			_hra = arguments[0];
+			triggerChange('Hra');
+		};
+		this.da = function(){
+			if (arguments.length === 0) return _da;
+			_da = arguments[0];
+			triggerChange('Da');
+		};
+		this.tax = function(){
+			if (arguments.length === 0) return _tax;
+			_tax = arguments[0];
+			triggerChange('Tax');
+		};
+		this.salary = function(){
+			return _salary;
+		}
+		this.calculate = function(){
+			var gross = this.basic() + this.hra() + this.da();
+			_salary = gross * (100 - this.tax())/100;
+			triggerChange('Salary');
+		}
+	}
+
+
 	(function(){
 		window.addEventListener("DOMContentLoaded",init);
+		window.calculator = new SalaryCalculator();
 		function init(){
 			document.getElementById("btnCalculate").addEventListener("click",onBtnCalculateClick);
-			document.getElementById("rangeTax").addEventListener("change", onRangeTaxChange);
+
+			document.getElementById("txtBasic").addEventListener("change",function(){
+				calculator.basic(parseFloat(this.value,10));
+			});
+			document.getElementById("txtHra").addEventListener("change",function(){
+				calculator.hra(parseFloat(this.value,10));
+			});
+			document.getElementById("txtDa").addEventListener("change",function(){
+				calculator.da(parseFloat(this.value,10));
+			});
+			document.getElementById("rangeTax").addEventListener("change",function(){
+				calculator.tax(parseFloat(this.value,10));
+			});
+
+			calculator.addSubscriber("Basic",function(){
+				document.getElementById("txtBasic").value = calculator.basic();
+			});
+
+			calculator.addSubscriber("Hra",function(){
+				document.getElementById("txtHra").value = calculator.hra();
+			});
+			
+			calculator.addSubscriber("Da",function(){
+				document.getElementById("txtDa").value = calculator.da();
+			});
+			
+			calculator.addSubscriber("Tax",function(){
+				document.getElementById("rangeTax").value = calculator.tax();
+				document.getElementById("spanTax").innerText = calculator.tax() +"%";
+
+			});
+			
+
+			calculator.addSubscriber('Salary',function(){
+				document.getElementById("divResult").innerHTML = calculator.salary();	
+			});
 		}
-		function onRangeTaxChange(){
-			document.getElementById("spanTax").innerText = this.value +"%";
-		}
+		
 		function onBtnCalculateClick(){
-			var basic = parseFloat(document.getElementById("txtBasic").value,10);
-			var hra = parseFloat(document.getElementById("txtHra").value,10);
-			var da = parseFloat(document.getElementById("txtDa").value,10);
-			var tax = parseFloat(document.getElementById("rangeTax").value,10);
-			var gross = basic + hra + da;
-			var net = gross * (100 - tax)/100;
-			document.getElementById("divResult").innerHTML = net;
+			
+			calculator.calculate();
+			
 		}
 	})();
 
